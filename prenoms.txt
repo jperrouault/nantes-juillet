@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ﻿<<<<<<< Updated upstream
 J�r�my
 Lucile
@@ -10,3 +11,11 @@ lailaaaaaa
 Xavier
 Xavier
 ArnaudSamuel
+=======
+﻿Jérémy
+Lucile
+Guillaume
+Emma
+Arnaud
+Lailaaaa
+>>>>>>> Stashed changes
