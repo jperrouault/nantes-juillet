@@ -1,4 +1,12 @@
+<<<<<<< Updated upstream
 J�r�my
 Lucile
 Guillaume
 Emma
+=======
+﻿Jérémy
+Lucile
+Guillaume
+Emma
+Arnaud
+>>>>>>> Stashed changes
