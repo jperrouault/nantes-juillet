@@ -1,5 +1,7 @@
 package fr.sopramon.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -23,6 +25,13 @@ public class Item {
 	private double prix;
 	
 	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="pointsDeVie", column=@Column(name="ITEM_POINTS_VIE", nullable=false)),
+		@AttributeOverride(name="attaque", column=@Column(name="ITEM_ATTAQUE", nullable=false)),
+		@AttributeOverride(name="defense", column=@Column(name="ITEM_DEFENSE", nullable=false)),
+		@AttributeOverride(name="esquive", column=@Column(name="ITEM_ESQUIVE", nullable=false)),
+		@AttributeOverride(name="vitesse", column=@Column(name="ITEM_VITESSE", nullable=false)),
+	})
 	private Capacite capacite;
 	
 	

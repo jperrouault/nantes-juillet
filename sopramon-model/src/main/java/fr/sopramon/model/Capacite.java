@@ -8,11 +8,11 @@ import javax.persistence.Embeddable;
 public class Capacite implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private int pointsDeVie;
-	private int attaque;
-	private int defense;
-	private int esquive;
-	private int vitesse;
+	private int pointsDeVie = 0;
+	private int attaque = 0;
+	private int defense = 0;
+	private int esquive = 0;
+	private int vitesse = 0;
 	
 
 	public int getPointsDeVie() {

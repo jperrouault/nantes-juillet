@@ -1,5 +1,6 @@
 package fr.sopramon.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 
 @Entity
 @Table(name="sopramon")
@@ -39,16 +41,16 @@ public class Sopramon extends Utilisateur implements ICombattant {
 	
 	@Embedded
 	@AttributeOverrides({
-		@AttributeOverride(name="pointsDeVie", column=@Column(name="SPMN_POINTS_VIE")),
-		@AttributeOverride(name="attaque", column=@Column(name="SPMN_ATTAQUE")),
-		@AttributeOverride(name="defense", column=@Column(name="SPMN_DEFENSE")),
-		@AttributeOverride(name="esquive", column=@Column(name="SPMN_ESQUIVE")),
-		@AttributeOverride(name="vitesse", column=@Column(name="SPMN_VITESSE")),
+		@AttributeOverride(name="pointsDeVie", column=@Column(name="SPMN_POINTS_VIE", nullable=false)),
+		@AttributeOverride(name="attaque", column=@Column(name="SPMN_ATTAQUE", nullable=false)),
+		@AttributeOverride(name="defense", column=@Column(name="SPMN_DEFENSE", nullable=false)),
+		@AttributeOverride(name="esquive", column=@Column(name="SPMN_ESQUIVE", nullable=false)),
+		@AttributeOverride(name="vitesse", column=@Column(name="SPMN_VITESSE", nullable=false)),
 	})
 	private Capacite capacite;
 	
-	@OneToMany
-	private List<Item> items;
+	@OneToMany(mappedBy="acheteur")
+	private List<Achat> achats;
 	
 	
 
@@ -101,15 +103,25 @@ public class Sopramon extends Utilisateur implements ICombattant {
 	}
 	
 	public List<Item> getItems() {
-		return items;
+		List<Item> myItems = new ArrayList<Item>();
+		
+		for (Achat a : this.achats) {
+			myItems.add(a.getItem());
+		}
+		
+		return myItems;
 	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
+	
 
 	@Override
 	public Coup attaquer(ICombattant victime) {
-		return null;
+		Coup myCoup = new Coup();
+		
+		myCoup.setAttaquant(this);
+		myCoup.setVictime(victime);
+		
+		myCoup.setDegats(100);
+		
+		return myCoup;
 	}
 }

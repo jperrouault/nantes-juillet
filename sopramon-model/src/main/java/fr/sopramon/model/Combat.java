@@ -1,8 +1,10 @@
 package fr.sopramon.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -57,7 +59,7 @@ public class Combat {
 	@JoinColumn(name="COM_BOSS_ID")
 	private Boss boss;
 	
-	@OneToMany(mappedBy="combat")
+	@OneToMany(mappedBy="combat", cascade= { CascadeType.PERSIST, CascadeType.REMOVE })
 	private List<Coup> coups;
 	
 	@ManyToOne
@@ -68,15 +70,11 @@ public class Combat {
 	@JoinColumn(name="COM_BOSS_VAINQUEUR_ID")
 	private Boss bossVainqueur;
 	
+	@Transient
+	private int combattant1PointsDeVie;
 	
 	@Transient
-	private ICombattant combattant1;
-	
-	@Transient
-	private ICombattant combattant2;
-	
-	@Transient
-	private ICombattant vainqueur;
+	private int combattant2PointsDeVie;
 	
 	
 	
@@ -120,23 +118,6 @@ public class Combat {
 		this.tours = tours;
 	}
 
-	
-	public ICombattant getCombattant1() {
-		return combattant1;
-	}
-
-	public void setCombattant1(ICombattant combattant1) {
-		this.combattant1 = combattant1;
-	}
-
-	public ICombattant getCombattant2() {
-		return combattant2;
-	}
-
-	public void setCombattant2(ICombattant combattant2) {
-		this.combattant2 = combattant2;
-	}
-
 	public List<Coup> getCoups() {
 		return coups;
 	}
@@ -144,24 +125,99 @@ public class Combat {
 	public void setCoups(List<Coup> coups) {
 		this.coups = coups;
 	}
-
-	public ICombattant getVainqueur() {
-		return vainqueur;
+	
+	
+	public ICombattant getCombattant1() {
+		if (this.boss != null) {
+			return this.boss;
+		}
+		
+		return this.sopramon1;
 	}
 
-	public void setVainqueur(ICombattant vainqueur) {
-		this.vainqueur = vainqueur;
-	}
-	
-	
-	
-	public boolean duel() {
-		if (tours % 2 == 0) {
-			System.out.println("JOUEUR 1");
+	public void setCombattant1(ICombattant combattant1) {
+		if (combattant1 instanceof Boss) {
+			this.boss = (Boss)combattant1;
 		}
 		
 		else {
-			System.out.println("JOUEUR 2");
+			this.sopramon1 = (Sopramon)combattant1;
+		}
+	}
+
+	public ICombattant getCombattant2() {
+		return this.sopramon2;
+	}
+
+	public void setCombattant2(ICombattant combattant2) {
+		this.sopramon2 = (Sopramon)combattant2;
+	}
+
+	public ICombattant getVainqueur() {
+		if (this.bossVainqueur != null) {
+			return this.bossVainqueur;
+		}
+		
+		return this.sopramonVainqueur;
+	}
+
+	public void setVainqueur(ICombattant vainqueur) {
+		if (vainqueur instanceof Boss) {
+			this.bossVainqueur = (Boss)vainqueur;
+		}
+		
+		else {
+			this.sopramonVainqueur = (Sopramon)vainqueur;
+		}
+	}
+	
+	
+	
+	
+	public Combat() {
+		this.date = new Date();
+		this.coups = new ArrayList<Coup>();
+	}
+	
+	
+	public boolean duel() {
+		Coup myCoup = null;
+		
+		//INITIALISATION DES PV SI DEMARRAGE DU COMBAT
+		if (this.combattant1PointsDeVie == 0) {
+			this.combattant1PointsDeVie = this.getCombattant1().getCapacite().getPointsDeVie();
+			this.combattant2PointsDeVie = this.getCombattant2().getCapacite().getPointsDeVie();
+		}
+		
+		//ON FAIT JOUER LE BON COMBATTANT
+		if (tours % 2 == 0) {
+			myCoup = this.getCombattant1().attaquer(this.getCombattant2());
+			this.combattant2PointsDeVie -= myCoup.getDegats();
+		}
+		
+		else {
+			myCoup = this.getCombattant2().attaquer(this.getCombattant1());
+			this.combattant1PointsDeVie -= myCoup.getDegats();
+		}
+		
+		
+		//ON INCREMENTE LE NOMBRE DE TOURS, ET ON AJOUTE LE COUP A LA LISTE DES COUPS
+		this.tours++;
+		this.coups.add(myCoup);
+		
+		
+		//SI LE COMBAT EST TERMINE
+		if (this.combattant1PointsDeVie <= 0 || this.combattant2PointsDeVie <= 0) {
+			//ON CHERCHE ET ON AFFECTE LE VAINQUEUR
+			if (this.combattant1PointsDeVie > 0) {
+				this.setVainqueur(this.getCombattant1());
+			}
+			
+			else {
+				this.setVainqueur(this.getCombattant2());
+			}
+			
+			return false;
 		}
 		
 		return true;

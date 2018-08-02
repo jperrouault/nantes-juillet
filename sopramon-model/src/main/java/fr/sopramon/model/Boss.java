@@ -1,5 +1,7 @@
 package fr.sopramon.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,8 +18,7 @@ import fr.sopramon.model.enumerateur.Type;
 
 @Entity
 @Table(name="boss")
-public class Boss implements ICombattant
-{
+public class Boss implements ICombattant {
 	@Id
 	@Column(name="BOSS_ID")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,6 +35,13 @@ public class Boss implements ICombattant
 	private int niveau;
 	
 	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name="pointsDeVie", column=@Column(name="BOSS_POINTS_VIE", nullable=false)),
+		@AttributeOverride(name="attaque", column=@Column(name="BOSS_ATTAQUE", nullable=false)),
+		@AttributeOverride(name="defense", column=@Column(name="BOSS_DEFENSE", nullable=false)),
+		@AttributeOverride(name="esquive", column=@Column(name="BOSS_ESQUIVE", nullable=false)),
+		@AttributeOverride(name="vitesse", column=@Column(name="BOSS_VITESSE", nullable=false)),
+	})
 	private Capacite capacite;
 	
 	
@@ -85,6 +93,13 @@ public class Boss implements ICombattant
 	
 	@Override
 	public Coup attaquer(ICombattant victime) {
-		return null;
+		Coup myCoup = new Coup();
+		
+		myCoup.setAttaquant(this);
+		myCoup.setVictime(victime);
+		
+		myCoup.setDegats(10);
+		
+		return myCoup;
 	}
 }

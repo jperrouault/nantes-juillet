@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="coup")
@@ -54,12 +53,6 @@ public class Coup {
 	private Boss bossVictime;
 	
 	
-	@Transient
-	private ICombattant attaquant;
-	
-	@Transient
-	private ICombattant victime;
-	
 	
 	public int getId() {
 		return id;
@@ -85,27 +78,54 @@ public class Coup {
 		this.degats = degats;
 	}
 
-	public ICombattant getAttaquant() {
-		return attaquant;
-	}
-
-	public void setAttaquant(ICombattant attaquant) {
-		this.attaquant = attaquant;
-	}
-
-	public ICombattant getVictime() {
-		return victime;
-	}
-
-	public void setVictime(ICombattant victime) {
-		this.victime = victime;
-	}
-
 	public int getPersistance() {
 		return persistance;
 	}
 
 	public void setPersistance(int persistance) {
 		this.persistance = persistance;
+	}
+	
+	
+	public ICombattant getAttaquant() {
+		if (this.sopramonAttaquant != null) {
+			return this.sopramonAttaquant;
+		}
+		
+		return bossAttaquant;
+	}
+
+	public void setAttaquant(ICombattant attaquant) {
+		if (attaquant instanceof Sopramon) {
+			this.sopramonAttaquant = (Sopramon)attaquant;
+		}
+		
+		else {
+			this.bossAttaquant = (Boss)attaquant;
+		}
+	}
+
+	public ICombattant getVictime() {
+		if (this.sopramonVictime != null) {
+			return this.sopramonVictime;
+		}
+		
+		return bossVictime;
+	}
+
+	public void setVictime(ICombattant victime) {
+		if (victime instanceof Sopramon) {
+			this.sopramonVictime = (Sopramon)victime;
+		}
+		
+		else {
+			this.bossVictime = (Boss)victime;
+		}
+	}
+	
+	
+	
+	public Coup() {
+		this.date = new Date();
 	}
 }
