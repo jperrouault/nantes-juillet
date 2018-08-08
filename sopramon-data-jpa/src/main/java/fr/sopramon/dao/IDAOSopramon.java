@@ -1,9 +1,8 @@
 package fr.sopramon.dao;
 
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import fr.sopramon.model.Sopramon;
 
-public interface IDAOSopramon extends Repository<Sopramon, Integer> {
-
+public interface IDAOSopramon extends JpaRepository<Sopramon, Integer> {
 }

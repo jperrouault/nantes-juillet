@@ -78,4 +78,9 @@ public class Achat {
 	public void setAcheteur(Sopramon acheteur) {
 		this.acheteur = acheteur;
 	}
+	
+	
+	public Achat() {
+		this.date = new Date();
+	}
 }

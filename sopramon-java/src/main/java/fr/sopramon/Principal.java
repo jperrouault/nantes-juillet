@@ -1,33 +1,58 @@
 package fr.sopramon;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import fr.sopramon.dao.IDAOAchat;
 import fr.sopramon.dao.IDAOBoss;
 import fr.sopramon.dao.IDAOCombat;
 import fr.sopramon.dao.IDAOItem;
 import fr.sopramon.dao.IDAOSopramon;
-import fr.sopramon.dao.hibernate.DAOBossHibernate;
-import fr.sopramon.dao.hibernate.DAOCombatHibernate;
-import fr.sopramon.dao.hibernate.DAOHibernate;
-import fr.sopramon.dao.hibernate.DAOItemHibernate;
-import fr.sopramon.dao.hibernate.DAOSopramonHibernate;
+import fr.sopramon.dao.IDAOUtilisateur;
+import fr.sopramon.model.Achat;
 import fr.sopramon.model.Boss;
 import fr.sopramon.model.Capacite;
 import fr.sopramon.model.Combat;
 import fr.sopramon.model.Item;
 import fr.sopramon.model.Sopramon;
+import fr.sopramon.model.Utilisateur;
 import fr.sopramon.model.enumerateur.Arene;
 import fr.sopramon.util.Astro;
 
 public class Principal {
-	private static Scanner sc = new Scanner(System.in);
-	private static Sopramon user;
+	private Scanner sc = new Scanner(System.in);
+	private Sopramon user;
 	
 
-	public static void main(String[] args) throws ParseException {
+	@Autowired
+	private IDAOUtilisateur daoUtilisateur;
+	
+	@Autowired
+	private IDAOSopramon daoSopramon;
+	
+	@Autowired
+	private IDAOBoss daoBoss;
+	
+	@Autowired
+	private IDAOCombat daoCombat;
+	
+	@Autowired
+	private IDAOItem daoItem;
+	
+	@Autowired
+	private IDAOAchat daoAchat;
+
+	
+	
+	public void run(String[] args) {
+		//CONNEXION OBLIGATOIRE
+		while (user == null) {
+			user = auth();
+		}
+		
 		do {
 			int choixMenu = printAndChooseMenu();
 
@@ -47,9 +72,9 @@ public class Principal {
 				createAccount();
 				break;
 
-			// SE CONNECTER
+			// ACHETER UN ITEM
 			case 3:
-				user = auth();
+				buyItem();
 				break;
 
 			// DEMARRER UN COMBAT
@@ -86,14 +111,14 @@ public class Principal {
 	 * MENU
 	 * @return
 	 */
-	private static int printAndChooseMenu() {
+	private int printAndChooseMenu() {
 		int choixMenu = -1;
 
 		while (choixMenu < 0 || choixMenu > 8) {
 			System.out.println("-----------------------------");
 			System.out.println("1. Liste des Sopramons");
 			System.out.println("2. Créer un compte");
-			System.out.println("3. Se connecter");
+			System.out.println("3. Acheter un item");
 			System.out.println("4. Démarrer un combat avec un boss");
 			System.out.println("5. Voir les items");
 			System.out.println("6. Ajouter un item");
@@ -110,12 +135,44 @@ public class Principal {
 	
 	
 	
+
+	/**
+	 * Se connecter
+	 * @return Le sopramon utilisateur
+	 */
+	private Sopramon auth() {
+		Utilisateur myUtilisateur = null;
+		
+		try {
+			System.out.println("Votre nom d'utilisateur :");
+			String myUsername = sc.next();
+
+			System.out.println("Votre mot de passe :");
+			String myPassword = sc.next();
+			
+			myUtilisateur = daoUtilisateur.auth(myUsername, myPassword);
+			
+			if (myUtilisateur instanceof Sopramon) {
+				return (Sopramon)myUtilisateur;
+			}
+			
+			System.err.println("Désolé, les administrateurs n'ont pas encore d'accès !");
+			return null;
+		}
+
+		catch (Exception e) {
+			System.err.println("Impossible de se connecter... Désolé !");
+		}
+
+		return null;
+	}
+	
+	
+	
 	/**
 	 * Lister les Sopramons
 	 */
-	private static void printSopramons() {
-		IDAOSopramon daoSopramon = new DAOSopramonHibernate();
-
+	private void printSopramons() {
 		for (Sopramon s : daoSopramon.findAll()) {
 			System.out.println(s.getNom());
 		}
@@ -126,8 +183,7 @@ public class Principal {
 	/**
 	 * Créer un compte
 	 */
-	private static void createAccount() {
-		IDAOSopramon daoSopramon = new DAOSopramonHibernate();
+	private void createAccount() {
 		Sopramon mySopramon = new Sopramon();
 		Capacite myCapacite = new Capacite();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -165,27 +221,16 @@ public class Principal {
 	
 
 	/**
-	 * Se connecter
-	 * @return Le sopramon utilisateur
+	 * Acheter un item
 	 */
-	private static Sopramon auth() {
-		IDAOSopramon daoSopramon = new DAOSopramonHibernate();
-
-		try {
-			System.out.println("Votre nom d'utilisateur :");
-			String myUsername = sc.next();
-
-			System.out.println("Votre mot de passe :");
-			String myPassword = sc.next();
-
-			return daoSopramon.auth(myUsername, myPassword);
-		}
-
-		catch (Exception e) {
-			System.err.println("Impossible de se connecter... Désolé !");
-		}
-
-		return null;
+	private void buyItem() {
+		Achat myAchat = new Achat();
+		
+		myAchat.setItem(selectItem());
+		myAchat.setAcheteur(user);
+		myAchat.setPrix(myAchat.getItem().getPrix());
+		
+		daoAchat.save(myAchat);
 	}
 	
 	
@@ -193,8 +238,7 @@ public class Principal {
 	/**
 	 * Combat avec un boss
 	 */
-	private static void startBattle() {
-		IDAOBoss daoBoss = new DAOBossHibernate();
+	private void startBattle() {
 		List<Boss> myBosses = daoBoss.findAll();
 		int choixBoss = 0;
 		boolean isDuelRunning = true;
@@ -209,8 +253,7 @@ public class Principal {
 			choixBoss = sc.nextInt();
 		}
 		
-
-		IDAOCombat daoCombat = new DAOCombatHibernate();
+		
 		Boss selectedBoss = myBosses.get(choixBoss - 1);
 		Combat myCombat = new Combat();
 
@@ -236,9 +279,7 @@ public class Principal {
 	/**
 	 * Lister les Items
 	 */
-	private static void printItems() {
-		IDAOItem daoItem = new DAOItemHibernate();
-
+	private void printItems() {
 		for (Item i : daoItem.findAll()) {
 			System.out.println(i.getNom() + ", " + i.getPrix() + " pièces d'or");
 		}
@@ -249,8 +290,7 @@ public class Principal {
 	/**
 	 * Ajouter un Item
 	 */
-	private static void addItem() {
-		IDAOItem daoItem = new DAOItemHibernate();
+	private void addItem() {
 		Item myItem = new Item();
 		Capacite myCapacite = new Capacite();
 
@@ -287,8 +327,7 @@ public class Principal {
 	/**
 	 * Sélectionner un Item
 	 */
-	private static Item selectItem() {
-		IDAOItem daoItem = new DAOItemHibernate();
+	private Item selectItem() {
 		List<Item> myItems = daoItem.findAll();
 		int choixItem = 0;
 		
@@ -310,8 +349,7 @@ public class Principal {
 	/**
 	 * Modifier un Item
 	 */
-	private static void updateItem() {
-		IDAOItem daoItem = new DAOItemHibernate();
+	private void updateItem() {
 		Item myItem = selectItem();
 		
 		try {
@@ -346,8 +384,7 @@ public class Principal {
 	/**
 	 * Supprimer un Item
 	 */
-	private static void removeItem() {
-		IDAOItem daoItem = new DAOItemHibernate();
+	private void removeItem() {
 		daoItem.delete(selectItem());
 	}
 	
@@ -356,9 +393,8 @@ public class Principal {
 	/**
 	 * Quitter l'application
 	 */
-	private static void exit() {
+	private void exit() {
 		sc.close();
-		DAOHibernate.close();
 		System.out.println("Au revoir !");
 		System.exit(0);
 	}
