@@ -1,0 +1,20 @@
+.slidable {
+	position: relative;
+	min-height: 100vh;
+	overflow-x: hidden;
+}
+
+.slide {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	transition: all 0.25s ease-in-out;
+}
+
+.slide.no-transition {
+	transition: none;
+}
+
+.slide:not(:first-of-type) {
+	transform: translateX(100vw);
+}

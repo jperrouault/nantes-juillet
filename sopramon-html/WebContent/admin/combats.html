@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sopramon - THE GAME</title>
+		<meta name="description" content="Sopramon, un jeu avec prises de tête" />
+		<meta charset="utf-8" />
+		<base href="/sopramon-html/" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+		<link rel="stylesheet" href="assets/css/admin.css" />
+		<link rel="stylesheet" href="assets/css/slidable.css" />
+	</head>
+	
+	
+	<body>
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="admin/index.html">
+				<img src="assets/img/sopramon.svg" class="d-inline-block align-top" />
+				Sopramon
+			</a>
+			
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link" href="admin/index.html">Accueil</a>
+					<a class="nav-item nav-link" href="admin/items.html">Items</a>
+					<a class="nav-item nav-link" href="admin/sopramons.html">Sopramons</a>
+					<a class="nav-item nav-link active" href="admin/combats.html">Combats</a>
+				</div>
+			</div>
+		</nav>
+		
+		
+		<div class="slidable">
+			<section id="combats" class="slide">
+				<div class="container">
+					<h1>Liste des Combats</h1>
+					
+					<table id="combats" class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">Date</th>
+								<th scope="col">Arène</th>
+								<th scope="col">Type</th>
+								<th scope="col">Combattant 1</th>
+								<th scope="col">Combattant 2</th>
+								<th scope="col">Coups</th>
+							</tr>
+						</thead>
+						
+						<tbody></tbody>
+					</table>
+				</div>
+			</section>
+			
+			
+			<section id="coups" class="slide">
+				<div class="container">
+					<h1>Liste des Coups</h1>
+					<a href="#to-combats">Revenir aux combats</a>
+					
+					<table id="coups" class="table table-striped">
+						<thead>
+							<tr>
+								<th scope="col">Date</th>
+								<th scope="col">Attaquant</th>
+								<th scope="col">Victime</th>
+								<th scope="col">Dégats</th>
+							</tr>
+						</thead>
+						
+						<tbody></tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+		
+		
+		
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  		<script src="assets/js/admin/slidable.js"></script>
+  		<script src="assets/js/admin/combats.js"></script>
+	</body>
+</html>
