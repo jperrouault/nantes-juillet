@@ -8,7 +8,7 @@ import javax.persistence.Embeddable;
 public class Capacite implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private int pointsDeVie = 0;
+	private int pointsDeVie = 100;
 	private int attaque = 0;
 	private int defense = 0;
 	private int esquive = 0;
