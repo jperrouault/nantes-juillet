@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout.html">
+	<head>
+		<title>Liste des combats</title>
+	</head>
+	
+	
+	<body>
+		<h1 layout:fragment="custom-title">Liste des combats</h1>
+		
+		<div layout:fragment="custom-content">
+			<table id="combats" class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">Date</th>
+						<th scope="col">Arène</th>
+						<th scope="col">Type</th>
+						<th scope="col">Combattant 1</th>
+						<th scope="col">Combattant 2</th>
+						<th scope="col">Coups</th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr th:each="combat : ${ combats }">
+						<td th:text="${ #dates.format(combat.date, 'dd/MM/yyyy hh:mm') }"></td>
+						<td th:text="${ combat.arene }"></td>
+						<td th:text="${ combat.type }"></td>
+						<td th:text="${ combat.combattant1.nom }"></td>
+						<td th:text="${ combat.combattant2.nom }"></td>
+						<td th:text="${ combat.coups.size() }"></td>
+					</tr>
+				</tbody>
+			</table>
+	    </div>
+	</body>
+</html>

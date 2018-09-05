@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorator="layout.html">
+	<head>
+		<title>Liste des items</title>
+	</head>
+	
+	
+	<body>
+		<h1 layout:fragment="custom-title">Liste des items</h1>
+		
+		<div layout:fragment="custom-content">
+			<a href="items/ajouter">Ajouter un item</a>
+			
+			<table id="items" class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Prix</th>
+						<th scope="col">Capacités (A, D, E, V, PV)</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr th:each="item : ${ items }">
+						<td th:text="${ item.id }"></td>
+						<td th:text="${ item.nom }"></td>
+						<td th:text="${ item.prix }"></td>
+						<td>[[${ item.capacite.attaque }]], [[${ item.capacite.defense }]], [[${ item.capacite.esquive }]], [[${ item.capacite.vitesse }]], [[${ item.capacite.pointsDeVie }]]</td>
+						<td>
+							<a th:href="@{items/editer(id=${ item.id })}" class="btn btn-warning">Modifier</a>
+							<a th:href="@{items/supprimer(id=${ item.id })}" class="btn btn-danger">Supprimer</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+	    </div>
+	</body>
+</html>

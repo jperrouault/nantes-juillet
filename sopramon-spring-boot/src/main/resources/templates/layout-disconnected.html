@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<head>
+		<base href="/" />
+		<meta charset="UTF-8" />
+		<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">EWAVY</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="assets/css/login.css" />
+	</head>
+	
+	
+	<body>
+		<header class="text-center mb-4">
+			<img class="mb-4" src="assets/img/sopramon.svg" />
+			<h1 layout:fragment="custom-title" class="h3 mb-3 font-weight-normal">?</h1>
+			<p layout:fragment="custom-message">?</p>
+		</header>
+		
+		<div layout:fragment="custom-content" class="container">
+			<p>?</p>
+		</div>
+	</body>
+</html>
