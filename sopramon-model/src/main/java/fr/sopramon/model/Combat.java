@@ -20,6 +20,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonSetter;
+
 import fr.sopramon.model.enumerateur.Arene;
 import fr.sopramon.model.enumerateur.Type;
 
@@ -49,14 +52,17 @@ public class Combat {
 
 	@ManyToOne
 	@JoinColumn(name="COM_SOPRAMON_1_ID")
+	@JsonSetter
 	private Sopramon sopramon1;
 	
 	@ManyToOne
 	@JoinColumn(name="COM_SOPRAMON_2_ID")
+	@JsonSetter
 	private Sopramon sopramon2;
 	
 	@ManyToOne
 	@JoinColumn(name="COM_BOSS_ID")
+	@JsonSetter
 	private Boss boss;
 	
 	@OneToMany(mappedBy="combat", cascade= { CascadeType.PERSIST, CascadeType.REMOVE })
@@ -85,7 +91,8 @@ public class Combat {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="CET")
 	public Date getDate() {
 		return date;
 	}

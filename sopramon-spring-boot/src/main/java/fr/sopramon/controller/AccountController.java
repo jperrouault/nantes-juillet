@@ -66,7 +66,7 @@ public class AccountController implements AuthenticationSuccessHandler {
 		}
 		
 		else {
-			response.sendRedirect("/world");
+			response.sendRedirect("http://localhost:3000/");
 		}
 	}
 }

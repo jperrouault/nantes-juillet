@@ -1,0 +1,24 @@
+<div class="container">
+    <a [routerLink]="['/']" routerLinkActive="active">Revenir</a>
+    <h1>Magasin</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Prix</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let i of storeService.findAll()">
+                <td>{{ i.nom }}</td>
+                <td>{{ i.prix }}</td>
+                <td>
+                    <button class="btn btn-success" (click)="acheter(i)">Acheter</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

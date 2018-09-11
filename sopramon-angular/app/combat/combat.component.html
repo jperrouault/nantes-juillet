@@ -1,0 +1,25 @@
+<div class="container">
+    <a [routerLink]="['/']" routerLinkActive="active">Revenir</a>
+    <h1>Arene</h1>
+
+    <button class="btn btn-success" (click)="startNewOne()">Démarrer un nouveau combat</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Arene</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let c of combatService.findAll()">
+                <td>{{ c.date }}</td>
+                <td>{{ c.arene }}</td>
+                <td>
+                    <button class="btn btn-warning">Rejoindre</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

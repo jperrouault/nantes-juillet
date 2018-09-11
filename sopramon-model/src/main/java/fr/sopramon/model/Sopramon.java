@@ -17,6 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="sopramon")
@@ -50,10 +53,12 @@ public class Sopramon extends Utilisateur implements ICombattant {
 	private Capacite capacite;
 	
 	@OneToMany(mappedBy="acheteur")
+	@JsonIgnore
 	private List<Achat> achats;
 	
 	
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="CET")
 	public Date getDateNaissance() {
 		return dateNaissance;
 	}
@@ -102,6 +107,8 @@ public class Sopramon extends Utilisateur implements ICombattant {
 		this.capacite = capacite;
 	}
 	
+	
+	@JsonIgnore
 	public List<Item> getItems() {
 		List<Item> myItems = new ArrayList<Item>();
 		
